@@ -1,6 +1,6 @@
-* Last name:
-* First name:
-* Github username:
+* Last name: Mueller
+* First name: Brian
+* Github username: brianmueller
 
 * Instructions:
 
@@ -12,7 +12,3 @@ folder. Folders will be specified when assignments are given.
 Your final project and weekly_ethicacy assignments should be added to
 their respective folders. Group work should be added to all members
 repositories.
-
-
-
-
