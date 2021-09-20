@@ -14,6 +14,7 @@ def print_board(board):
         for j in range(len(board[i])):
             print(board[i][j], end = '')
         print('')
+    print('')
 
 
 def set_cell(board, r, c, val):
@@ -22,15 +23,13 @@ def set_cell(board, r, c, val):
 def count_neighbors(board, r, c):
     living_neighbors = 0
     i = r-1
-    while(i <= r+1): # from one row before to another
-        if(i >= 0 and i <= len(board)): # within row bounds
+    for i in range(r-1, r+2): # from one row before to another
+        if(i >= 0 and i < len(board)): # within row bounds
             j = c-1
-            while(j <= c+1): # from one column before to one after
+            for j in range(c-1, c+2): # from one column before to one after
                 if(j >= 0 and j < len(board[r])): # within column bounds
                     if(board[i][j] == 'X'): # cell is alive
                         living_neighbors = living_neighbors + 1 # add to living_neighbors
-                j = j+1
-        i = i+1
     if(board[r][c] == 'X'): # if current cell alive...
         living_neighbors = living_neighbors - 1 # ...it's not a 'neighbor'
     return living_neighbors
@@ -81,6 +80,7 @@ set_cell(board, 5, 5, 'X')
 
 for i in range(20):
     # sys.stdout.write('/-\\|'[i%4])
+    print('Gen: ' + str(i))
     print_board(board)
     time.sleep(0.5)
     sys.stdout.write('\r')
