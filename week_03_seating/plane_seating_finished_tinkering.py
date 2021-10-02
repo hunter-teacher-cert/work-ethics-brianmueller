@@ -41,7 +41,7 @@ def get_avail_seats(plane,economy_sold):
     Notes: this loops over the plane and counts the number of seats that are "avail" or "win"
            and removes the number of economy_sold seats
     """
-    avail = 0;
+    avail = 0
     for r in plane:
         for c in r:
             if c == "avail" or c == "win":
