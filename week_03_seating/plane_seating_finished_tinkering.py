@@ -142,6 +142,10 @@ def seat_economy(plane,economy_sold,name):
         if plane[r_row][r_col] == "win" or plane[r_row][r_col] == "avail":
             plane[r_row][r_col] = name
             found_seat = True
+            print("seating " + name + " at row:" + str(r_row) + ", col: " + str(r_col))
+            print(get_plane_string(plane))
+            print("economy_sold: " + str(economy_sold))
+            print(" ")
     return plane
 
 
@@ -186,14 +190,20 @@ def fill_plane(plane):
 
     max_family_size = 3
     while total_seats > 1:
+        print("TOTAL SEATS: " + str(total_seats))
+        print(" ")
         r = random.randrange(100)
         if r > 30:
+            print("r=" + str(r) + ": purchase_economy_plus; economy_sold: " + str(economy_sold) + "; ep_" + str(ep_number))
             plane = purchase_economy_plus(plane,economy_sold,"ep-%d"%ep_number)
             ep_number = ep_number + 1
             total_seats = get_avail_seats(plane,economy_sold)
         else:
+            print("r=" + str(r) + ": purchase_economy_block; economy_sold: " + str(economy_sold) + "; u_" + str(u_number))
             economy_sold = purchase_economy_block(plane,economy_sold,1+random.randrange(max_family_size),"u-%d"%u_number)
             u_number = u_number + 1
+        print(get_plane_string(plane))
+        print(" ")
 
 
     # once the plane reaches a certian seating capacity, assign
