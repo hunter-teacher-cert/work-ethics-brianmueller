@@ -168,6 +168,21 @@ def purchase_economy_block(plane,economy_sold,number,name):
     return economy_sold
 
 
+def generate_family():
+    """
+    Generates a dictionary of up to 3 family members and their ages
+    Example: {
+        'f-1': 33,
+        'f-2': 30,
+        'f-3': 2
+    }
+    """
+    max_family_size = 3
+    family = {}
+    for i in range(3):
+        family['f-'+str(i+1)] = random.randrange(100) # max age: 99
+    return family
+
 def fill_plane(plane):
     """
     Params: plane - a list of lists representing a plane
