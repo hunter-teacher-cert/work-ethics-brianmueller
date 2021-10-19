@@ -1,6 +1,7 @@
-# As a simpler alternative, any family that includes at least one child under the age of 5 (0-4) will all get economy_plus tickets and are thus able to choose their seats
+# Any family that includes at least one child under the age of 5 (0-4) will all get economy_plus tickets and are thus able to choose their seats
 # Implementation considerations: 
 # Must include data that represents passengers' ages
+# Future work: instead of families choosing seats randomly, they choose to sit together
 
 import random
 
@@ -178,8 +179,9 @@ def generate_family():
     }
     """
     max_family_size = 3
+    family_size = random.randrange(max_family_size)+1
     family = {}
-    for i in range(3):
+    for i in range(family_size):
         family['f-'+str(i+1)] = random.randrange(100) # max age: 99
     return family
 
@@ -202,27 +204,54 @@ def fill_plane(plane):
     ep_number=1
     u_number=1
 
-    # MODIFY THIS
-    # you will probably want to change parts of this
-    # for example, when to stop purchases, the probabilities, maybe the size for the random
-    # regular economy size
-
-    max_family_size = 3
+    
     while total_seats > 1:
-        print("TOTAL SEATS: " + str(total_seats))
+        print("TOTAL SEATS BEFORE SEATING: " + str(total_seats))
+        while True:    
+            new_family = generate_family()
+            new_family_size = len(new_family)
+            print("trying family size: " + str(new_family_size))
+            if new_family_size < total_seats: # found a family that will fit on the plane
+                break
+        print("family: " + str(new_family) + "\n")
+        
         print(" ")
-        r = random.randrange(100)
-        if r > 30:
-            print("r=" + str(r) + ": purchase_economy_plus; economy_sold: " + str(economy_sold) + "; ep_" + str(ep_number))
-            plane = purchase_economy_plus(plane,economy_sold,"ep-%d"%ep_number)
-            ep_number = ep_number + 1
-            total_seats = get_avail_seats(plane,economy_sold)
-        else:
-            print("r=" + str(r) + ": purchase_economy_block; economy_sold: " + str(economy_sold) + "; u_" + str(u_number))
-            economy_sold = purchase_economy_block(plane,economy_sold,1+random.randrange(max_family_size),"u-%d"%u_number)
-            u_number = u_number + 1
+        any_babies = False
+        for person in new_family:
+            if(new_family[person] < 5):
+                any_babies = True
+                break
+        if any_babies: # anyone under 5
+            print("BABY ALERT!")
+            # they get economy_plus tickets
+            # at this point, they get to pick their seats
+            # currently, it's random
+            # ideally, they'd pick their seats together (if available)
+            # in a future iteration of this algorithm, perhaps they will!
+            for i in range(new_family_size):
+                print("family with babies UPGRADE purchase_economy_plus; economy_sold: " + str(economy_sold) + "; ep_" + str(ep_number))
+                plane = purchase_economy_plus(plane,economy_sold,"EP-%d"%ep_number) # capital to show family with baby(ies)
+                ep_number = ep_number + 1
+                # total_seats = get_avail_seats(plane,economy_sold)
+        else: # all ages 5+
+            r = random.randrange(100)
+            if r > 30: # wants to purchase economy plus
+                for i in range(new_family_size):
+                    print("r=" + str(r) + ": purchase_economy_plus; economy_sold: " + str(economy_sold) + "; ep_" + str(ep_number))
+                    plane = purchase_economy_plus(plane,economy_sold,"ep-%d"%ep_number)
+                    ep_number = ep_number + 1
+                    # total_seats = get_avail_seats(plane,economy_sold)
+            else: # wants to purchase economy
+                for i in range(new_family_size):
+                    print("r=" + str(r) + ": purchase_economy_block; economy_sold: " + str(economy_sold) + "; u_" + str(u_number))
+                    economy_sold = purchase_economy_block(plane,economy_sold,1,"u-%d"%u_number)
+                    u_number = u_number + 1
+                    # total_seats = get_avail_seats(plane,economy_sold)
         print(get_plane_string(plane))
         print(" ")
+        total_seats = get_avail_seats(plane,economy_sold)
+        print("TOTAL SEATS AFTER SEATING: " + str(total_seats))
+        print("----------------------------------------------")
 
 
     # once the plane reaches a certian seating capacity, assign
